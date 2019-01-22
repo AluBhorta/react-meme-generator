@@ -8,7 +8,17 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+.meme-images {
+  padding: 1rem;
+  background-color: #f3f3f3;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-gap: 0.5rem;
+}
+
+.meme-images img {
+}
+
+.text-form {
+  padding: 1rem;
 }
