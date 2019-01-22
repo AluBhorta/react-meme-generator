@@ -23,7 +23,7 @@ class MemeGenerator extends Component {
 
   onSaveMeme = e => {
     e.preventDefault();
-    console.log("Save image not implemented");
+    alert("Save image not yet implemented, sorry");
   };
 
   handleTextChange = e => {
