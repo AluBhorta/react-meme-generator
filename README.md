@@ -4,7 +4,7 @@ A simple react application to make your own memes.
 
 "_Don't Let your Memes be Dreams._"
 
-### To implement
+## To implement
 
 - embeded text editor
 - saving/downloading of the edited image
