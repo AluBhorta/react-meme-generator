@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
+import logo from "./logo2.svg";
 import MemeGenerator from "./components/MemeGenerator";
+import Footer from "./components/Footer";
 
 class App extends Component {
   render() {
@@ -11,6 +12,7 @@ class App extends Component {
           <h2>React Meme Generator</h2>
         </header>
         <MemeGenerator />
+        <Footer />
       </div>
     );
   }

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import TextForm from "./TextForm";
 import CurrentImage from "./CurrentImage";
+import MemeLibrary from "./MemeLibrary";
 
 class MemeGenerator extends Component {
   state = {
@@ -34,41 +35,13 @@ class MemeGenerator extends Component {
   };
 
   handleImgClick = e => {
-    this.setState({ currentImage: e.target.src });
+    this.setState({ currentImage: e.target });
   };
 
-  getMemeImageElements() {
-    let imgStyles = {
-      cursor: "pointer",
-      width: "150px",
-      height: "150px"
-    };
-    let memeImages;
-    if (this.state.allImages) {
-      memeImages = this.state.allImages.map(image => (
-        <React.Fragment key={image.id}>
-          {/* <p>
-            <strong>{"image id: " + image.id}</strong>
-          </p> */}
-          <img
-            id={image.id}
-            src={image.url}
-            alt={image.name}
-            style={imgStyles}
-            onClick={this.handleImgClick}
-          />
-        </React.Fragment>
-      ));
-      return memeImages;
-    }
-    return null;
-  }
-
   render() {
-    let memeImages = this.getMemeImageElements();
     return (
       <div className="meme-generator">
-        {/* form for  */}
+        {/* form for text */}
         <TextForm
           topText={this.state.topText}
           bottomText={this.state.bottomText}
@@ -83,7 +56,10 @@ class MemeGenerator extends Component {
 
         {/* all meme images */}
         <h2>Meme Library</h2>
-        <div className="meme-images">{memeImages}</div>
+        <MemeLibrary
+          allImages={this.state.allImages}
+          handleImgClick={this.handleImgClick}
+        />
       </div>
     );
   }

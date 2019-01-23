@@ -7,7 +7,8 @@ A simple react application to make your own memes.
 ## To implement
 
 - embeded text editor
-- saving/downloading of the edited image
+- save/download the edited image
+- resize image
 - '_Remove Current Image_' button
 - share on socials
 
