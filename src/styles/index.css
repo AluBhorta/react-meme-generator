@@ -99,13 +99,5 @@ body {
   color: var(--mistyrose);
 }
 
-@media (min-width: 1200px) {
-  .top-container {
-    display: grid;
-    grid-template-columns: 1fr 4fr;
-    align-items: center;
-  }
-  .text-form {
-    /* border-right: #282c34 1px solid; */
-  }
-}
+/* @media (min-width: 1200px) {
+} */

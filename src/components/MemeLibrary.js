@@ -10,7 +10,7 @@ function getMemeImageElements(allImages, handleImgClick) {
   let memeImages;
   if (allImages) {
     memeImages = allImages.map(image => (
-      <a key={image.id} href="#current-image">
+      <a key={image.id} href="#top-container">
         <img
           id={image.id}
           src={image.url}

@@ -166,7 +166,7 @@ class MemeGenerator extends Component {
     return (
       <div className="meme-generator">
         {/* form for text */}
-        <div className="top-container">
+        <div className="top-container" id="top-container">
           <TextForm
             removeLastText={this.removeLastText}
             userText={this.state.userText}
