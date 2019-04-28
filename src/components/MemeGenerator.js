@@ -115,7 +115,7 @@ class MemeGenerator extends Component {
         <hr />
 
         {/* current working image */}
-        <button onClick={this.resetCurrentImage}>Reset Current Image</button>
+        {/* <button onClick={this.resetCurrentImage}>Reset Current Image</button> */}
         <CurrentImage currentImage={this.state.currentImage} />
         <hr />
 
