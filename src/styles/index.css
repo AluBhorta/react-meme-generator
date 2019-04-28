@@ -5,6 +5,9 @@
   --btn-color: #db3927;
 }
 
+html {
+  scroll-behavior: smooth;
+}
 body {
   background-color: var(--mistyrose);
   display: grid;
@@ -57,7 +60,6 @@ body {
   min-width: 300px;
   padding: 0.5rem;
 }
-
 .text-form {
   padding: 1rem;
 }
@@ -68,9 +70,6 @@ body {
   height: 5rem;
   display: grid;
   align-items: center;
-}
-
-.footer .footer-contents {
 }
 
 .footer a {

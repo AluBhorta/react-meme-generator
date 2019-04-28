@@ -10,7 +10,7 @@ function getMemeImageElements(allImages, handleImgClick) {
   let memeImages;
   if (allImages) {
     memeImages = allImages.map(image => (
-      <React.Fragment key={image.id}>
+      <a key={image.id} href="#current-image">
         <img
           id={image.id}
           src={image.url}
@@ -18,7 +18,7 @@ function getMemeImageElements(allImages, handleImgClick) {
           style={imgStyles}
           onClick={handleImgClick}
         />
-      </React.Fragment>
+      </a>
     ));
 
     return memeImages;
@@ -31,7 +31,12 @@ function MemeLibrary(props) {
 
   const memeImages = getMemeImageElements(allImages, handleImgClick);
 
-  return <div className="meme-library">{memeImages}</div>;
+  return (
+    <div id="meme-library-container">
+      <h2>Meme Library</h2>
+      <div className="meme-library">{memeImages}</div>
+    </div>
+  );
 }
 
 export default MemeLibrary;
