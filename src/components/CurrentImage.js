@@ -1,26 +1,7 @@
 import React from "react";
 
-function getMousePos(canvas, evt) {
-  const rect = canvas.getBoundingClientRect();
-  return {
-    x: evt.clientX - rect.left,
-    y: evt.clientY - rect.top
-  };
-}
-
-function handleText(evt) {
-  const canv = evt.target;
-
-  const ctx = canv.getContext("2d");
-  var pos = getMousePos(canv, evt);
-  console.log(pos);
-
-  ctx.fillStyle = "#000000";
-  ctx.fillRect(pos.x, pos.y, 4, 4);
-}
-
-function CurrentImage(props) {
-  const { src, alt } = props.currentImage;
+function CurrentImage({ currentImage, addTextToCanvas }) {
+  const { src, alt } = currentImage;
 
   return (
     <div className="current-image" id="current-image">
@@ -45,7 +26,7 @@ function CurrentImage(props) {
           id="imageCanvas"
           width={16 * 50}
           height={16 * 50}
-          onClick={handleText}
+          onClick={addTextToCanvas}
         >
           The Canvas element is not supported in your browser.
         </canvas>

@@ -5,8 +5,7 @@ import MemeLibrary from "./MemeLibrary";
 
 class MemeGenerator extends Component {
   state = {
-    topText: "",
-    bottomText: "",
+    userText: "",
     allImages: [],
     currentImage: ""
   };
@@ -102,21 +101,49 @@ class MemeGenerator extends Component {
     });
   };
 
+  getMousePos(canvas, evt) {
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: evt.clientX - rect.left,
+      y: evt.clientY - rect.top
+    };
+  }
+
+  handleText(evt) {
+    const canv = evt.target;
+
+    const ctx = canv.getContext("2d");
+    var pos = this.getMousePos(canv, evt);
+
+    ctx.font = "800 30px Impact, Arial";
+    ctx.fillStyle = "#433487";
+    ctx.fillText(this.state.userText, pos.x, pos.y);
+  }
+
+  addTextToCanvas = e => {
+    e.preventDefault();
+    this.handleText(e);
+    this.setState({ userText: "" });
+  };
+
   render() {
     return (
       <div className="meme-generator">
         {/* form for text */}
         <TextForm
-          topText={this.state.topText}
-          bottomText={this.state.bottomText}
+          userText={this.state.userText}
           handleTextChange={this.handleTextChange}
+          addTextToCanvas={this.addTextToCanvas}
           onSaveMeme={this.onSaveMeme}
         />
         <hr />
 
         {/* current working image */}
         {/* <button onClick={this.resetCurrentImage}>Reset Current Image</button> */}
-        <CurrentImage currentImage={this.state.currentImage} />
+        <CurrentImage
+          currentImage={this.state.currentImage}
+          addTextToCanvas={this.addTextToCanvas}
+        />
         <hr />
 
         {/* all meme images */}
