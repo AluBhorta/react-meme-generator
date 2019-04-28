@@ -1,20 +1,19 @@
 import React from "react";
 
 function TextForm(props) {
-  const { userText, addTextToCanvas, handleTextChange, onSaveMeme } = props;
+  const { userText, handleTextChange, removeLastText } = props;
   return (
     <form className="text-form">
       <input
         name="userText"
         value={userText}
         onChange={handleTextChange}
-        placeholder="Top Text"
+        placeholder="Enter text and click on image to insert"
       />
       <br />
-      <button onClick={addTextToCanvas}>Add Text</button>
-
-      <br />
-      <button onClick={onSaveMeme}>Save Meme</button>
+      <button className="remove-txt-btn" onClick={removeLastText}>
+        Remove last text
+      </button>
     </form>
   );
 }

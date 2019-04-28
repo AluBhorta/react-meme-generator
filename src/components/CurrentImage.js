@@ -17,7 +17,15 @@ function CurrentImage({ currentImage, addTextToCanvas }) {
           <h2>
             Current Image: <em>{alt}</em>
           </h2>
-          <p>Click and start typing on image to enter text.</p>
+          <p>
+            Type text on the text box and click on the image to insert the text
+            in that position.
+            <br />
+            Right click on Image and select <strong>
+              "Save image as..."
+            </strong>{" "}
+            to Save Meme.
+          </p>
         </div>
       )}
 

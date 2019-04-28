@@ -7,11 +7,8 @@ class MemeGenerator extends Component {
   state = {
     userText: "",
     allImages: [],
-    currentImage: ""
-  };
-
-  resetCurrentImage = e => {
-    this.setState({ currentImage: "" });
+    currentImage: "",
+    allEdits: []
   };
 
   componentDidMount() {
@@ -27,7 +24,14 @@ class MemeGenerator extends Component {
 
   onSaveMeme = e => {
     e.preventDefault();
-    alert("Save image not yet implemented, sorry");
+
+    const canv = document.getElementById("imageCanvas");
+    // Canvas2Image.saveAsPNG(canv);
+
+    var image = canv
+      .toDataURL("image/png")
+      .replace("image/png", "image/octet-stream");
+    window.location.href = image;
   };
 
   handleTextChange = e => {
@@ -35,62 +39,59 @@ class MemeGenerator extends Component {
     this.setState({ [name]: value });
   };
 
-  handleImgClick = e => {
-    this.setState({ currentImage: e.target });
+  // collected from studyJS:  http://www.studyjs.com/canvas/image.html
+  calculateAspectRatio = function(image) {
+    let canvas = document.getElementById("imageCanvas");
 
+    let imageAspectRatio = image.width / image.height;
+    let canvasAspectRatio = canvas.width / canvas.height;
+    let renderableHeight, renderableWidth, xStart, yStart;
+    let AspectRatio = {};
+
+    // If image's aspect ratio is less than canvas's we fit on height
+    // and place the image centrally along width
+    if (imageAspectRatio < canvasAspectRatio) {
+      renderableHeight = canvas.height;
+      renderableWidth = image.width * (renderableHeight / image.height);
+      xStart = (canvas.width - renderableWidth) / 2;
+      yStart = 0;
+    }
+
+    // If image's aspect ratio is greater than canvas's we fit on width
+    // and place the image centrally along height
+    else if (imageAspectRatio > canvasAspectRatio) {
+      renderableWidth = canvas.width;
+      renderableHeight = image.height * (renderableWidth / image.width);
+      xStart = 0;
+      yStart = (canvas.width - renderableHeight) / 2;
+    }
+
+    //keep aspect ratio
+    else {
+      renderableHeight = canvas.height;
+      renderableWidth = canvas.width;
+      xStart = 0;
+      yStart = 0;
+    }
+    AspectRatio.renderableHeight = renderableHeight;
+    AspectRatio.renderableWidth = renderableWidth;
+    AspectRatio.startX = xStart;
+    AspectRatio.startY = yStart;
+    return AspectRatio;
+  };
+
+  loadImageInCanvas = event => {
     const canvas = document.getElementById("imageCanvas");
     const ctx = canvas.getContext("2d");
 
-    // collected from studyJS:  http://www.studyjs.com/canvas/image.html
-    let calculateAspectRatio = function(image) {
-      let imageAspectRatio = image.width / image.height;
-      let canvasAspectRatio = canvas.width / canvas.height;
-      let renderableHeight, renderableWidth, xStart, yStart;
-      let AspectRatio = {};
-
-      // If image's aspect ratio is less than canvas's we fit on height
-      // and place the image centrally along width
-      if (imageAspectRatio < canvasAspectRatio) {
-        renderableHeight = canvas.height;
-        renderableWidth = image.width * (renderableHeight / image.height);
-        xStart = (canvas.width - renderableWidth) / 2;
-        yStart = 0;
-      }
-
-      // If image's aspect ratio is greater than canvas's we fit on width
-      // and place the image centrally along height
-      else if (imageAspectRatio > canvasAspectRatio) {
-        renderableWidth = canvas.width;
-        renderableHeight = image.height * (renderableWidth / image.width);
-        xStart = 0;
-        yStart = (canvas.width - renderableHeight) / 2;
-      }
-
-      //keep aspect ratio
-      else {
-        renderableHeight = canvas.height;
-        renderableWidth = canvas.width;
-        xStart = 0;
-        yStart = 0;
-      }
-      AspectRatio.renderableHeight = renderableHeight;
-      AspectRatio.renderableWidth = renderableWidth;
-      AspectRatio.startX = xStart;
-      AspectRatio.startY = yStart;
-      return AspectRatio;
-    };
-
     const img = new Image();
-    img.src = e.target.src;
+    img.src = event ? event.target.src : this.state.currentImage.src;
+    img.crossOrigin = "Anonymous";
     img.addEventListener("load", () => {
-      // self cofig === BS
-      // canvas.width = img.width;
-      // canvas.height = img.height;
-      // ctx.drawImage(img, 0, 0);
-
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+
       // from studyJS
-      let AR = calculateAspectRatio(img);
+      let AR = this.calculateAspectRatio(img);
       ctx.drawImage(
         img,
         AR.startX,
@@ -101,23 +102,38 @@ class MemeGenerator extends Component {
     });
   };
 
-  getMousePos(canvas, evt) {
+  handleImgClick = e => {
+    this.setState({ currentImage: e.target });
+
+    this.loadImageInCanvas(e);
+  };
+
+  getMousePos(canvas, e) {
     const rect = canvas.getBoundingClientRect();
     return {
-      x: evt.clientX - rect.left,
-      y: evt.clientY - rect.top
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
     };
   }
 
-  handleText(evt) {
-    const canv = evt.target;
+  handleText(e) {
+    const canv = e.target;
 
     const ctx = canv.getContext("2d");
-    var pos = this.getMousePos(canv, evt);
+    const pos = this.getMousePos(canv, e);
 
-    ctx.font = "800 30px Impact, Arial";
+    ctx.font = "800 40px Impact, Arial";
     ctx.fillStyle = "#433487";
     ctx.fillText(this.state.userText, pos.x, pos.y);
+
+    this.setState(ps => {
+      ps.allEdits.push({
+        posX: pos.x,
+        posY: pos.y,
+        text: this.state.userText
+      });
+      return ps;
+    });
   }
 
   addTextToCanvas = e => {
@@ -126,24 +142,44 @@ class MemeGenerator extends Component {
     this.setState({ userText: "" });
   };
 
+  removeLastText = e => {
+    e.preventDefault();
+    const canv = document.getElementById("imageCanvas");
+    const ctx = canv.getContext("2d");
+
+    this.setState(ps => {
+      ps.allEdits.pop();
+      return ps;
+    });
+    this.loadImageInCanvas(false);
+
+    setTimeout(() => {
+      ctx.font = "800 40px Impact, Arial";
+      ctx.fillStyle = "#433487";
+      this.state.allEdits.forEach(edit => {
+        ctx.fillText(edit.text, edit.posX, edit.posY);
+      });
+    }, 200);
+  };
+
   render() {
     return (
       <div className="meme-generator">
         {/* form for text */}
-        <TextForm
-          userText={this.state.userText}
-          handleTextChange={this.handleTextChange}
-          addTextToCanvas={this.addTextToCanvas}
-          onSaveMeme={this.onSaveMeme}
-        />
-        <hr />
+        <div className="top-container">
+          <TextForm
+            removeLastText={this.removeLastText}
+            userText={this.state.userText}
+            handleTextChange={this.handleTextChange}
+            onSaveMeme={this.onSaveMeme}
+          />
 
-        {/* current working image */}
-        {/* <button onClick={this.resetCurrentImage}>Reset Current Image</button> */}
-        <CurrentImage
-          currentImage={this.state.currentImage}
-          addTextToCanvas={this.addTextToCanvas}
-        />
+          {/* current working image */}
+          <CurrentImage
+            currentImage={this.state.currentImage}
+            addTextToCanvas={this.addTextToCanvas}
+          />
+        </div>
         <hr />
 
         {/* all meme images */}
